@@ -35,5 +35,16 @@ details$date <- mdy(details$date)
 
 slice <- details[details$YEAR == 2018]
 slice <- select(slice, date, rides, datetime, SPOSTMIN, SACTMIN, WEATHER_WDWPRECIP, WDWMAXTEMP, WDWMINTEMP, WDWMEANTEMP)
+unique(slice$datetime)
+fwrite(slice, "./disney_data_2018.csv")
 
-fwrite(slice, "disney_data_2018.csv")
+daily <- rbindlist(rides$data, use.names = T, idcol="rides")
+daily <- pivot_wider(daily, id_cols=c("date"), 
+                     names_from=rides, values_from=SPOSTMIN, values_fn=list(SPOSTMIN = mean))
+daily <- transform(daily, average = rowMeans(daily[,-1], na.rm=TRUE))
+
+#Merges the rows from rides with the metadata based on the date
+daily <- merge(x=daily, y=meta$data[[1]], by.x="date", by.y="DATE", all.x=TRUE, all.y=FALSE, allow.cartesian=TRUE)
+#Format Date
+daily$date <- mdy(daily$date)
+fwrite(slice, "./disney_data_daily.csv")
