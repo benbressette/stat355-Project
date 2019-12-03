@@ -6,7 +6,7 @@ library(lubridate)
 library(tidyr)
 
 #Read in data created from Generator.R
-data <- read.csv("~/Stat355/stat355-Project/disney_data_2018.csv")
+data <- read.csv("~/stat355-Project/Data/disney_data_2018.csv")
 
 #Add hour column
 data$hour <- hour(data$datetime)
@@ -24,5 +24,12 @@ closed$sum <- abs(closed$sum)
 closed_day <- closed %>% group_by(date) %>% summarise(closed = mean(sum), precip = min(WEATHER_WDWPRECIP))
 
 reg <- lm(closed ~ precip, closed_day)
+reg
+
+plot(closed ~ precip, data = closed_day, main = '# of Rides Closed by Precipitation', 
+     xlab = 'Precipitation (ft)', ylab = 'Average Closed Rides')
+abline(a=coef(reg)[1], b=coef(reg)[2], col=2, lwd=3)
+
 plot(reg)
+
 
