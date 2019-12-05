@@ -16,3 +16,6 @@ ggplot(myDF, aes(myDF$rides, myDF$SPOSTMIN)) + geom_boxplot(aes(col = myDF$rides
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) + xlab('Rides') + ylab('Posted Wait time') + 
   ggtitle('Posted Wait Times by Ride') + theme(legend.position = "none") 
 
+# Histogram of closed rides
+ggplot(closed, aes(sum)) + geom_histogram(aes(fill = 'red')) + xlab('Closed Ride Count') + 
+  ggtitle('Histogram of Closed Rides')  + theme(legend.position = "none") 
