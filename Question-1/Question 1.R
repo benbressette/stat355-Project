@@ -1,3 +1,8 @@
+library(dplyr)
+library(stringr)
+library(data.table)
+library(lubridate)
+library(tidyr)
 
 #Read in data created from Generator.R
 data <- read.csv("~/Stat355/stat355-Project/Data/disney_data_2018.csv")
