@@ -40,4 +40,4 @@ daily$std_closed <- scale(daily$closed)
 cor(daily$std_wait, daily$std_closed)
 plot(daily$closed, daily$average, 
      main="Daily Wait Time vs Daily Ride Closures", 
-     xlab="Aver Rides Closed During Day", ylab="Average Wait Time Throughout Day")
+     xlab="Average Rides Closed During Day", ylab="Average Wait Time Throughout Day")
