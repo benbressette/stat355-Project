@@ -1,6 +1,6 @@
 
 #Read in data created from Generator.R
-data <- read.csv("~/Stat355/stat355-Project/disney_data_2018.csv")
+data <- read.csv("~/Stat355/stat355-Project/Data/disney_data_2018.csv")
 
 #Remove NA values
 sub <- data[!is.na(data$SPOSTMIN),]
