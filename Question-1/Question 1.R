@@ -3,6 +3,7 @@ library(stringr)
 library(data.table)
 library(lubridate)
 library(tidyr)
+library(ggplot2)
 
 #Read in data created from Generator.R
 data <- read.csv("~/Stat355/stat355-Project/Data/disney_data_2018.csv")
@@ -18,8 +19,8 @@ more <- sub[sub$precipitation==1,]
 #Run t-test
 t.test(less$SPOSTMIN, more$SPOSTMIN)
 
-#Create a plot
-ggplot(myDF, aes(myDF$SPOSTMIN, myDF$WEATHER_WDWPRECIP)) + geom_bin2d() + 
+#Create a heatmap (used in presentation)
+ggplot(sub, aes(sub$SPOSTMIN, sub$WEATHER_WDWPRECIP)) + geom_bin2d() + 
   scale_fill_gradientn(colours=rainbow(4)) + xlab('Posted Wait Time') + ylab('Precipitation') +
   ggtitle('Heatmap of Posted Wait Times by Precip')
 
