@@ -6,7 +6,7 @@ library(lubridate)
 library(tidyr)
 
 #Read in data created from Generator.R
-data <- read.csv("~/stat355-Project/Data/disney_data_2018.csv")
+data <- read.csv("~/Stat355/stat355-Project/Data/disney_data_2018.csv")
 
 #Add hour column
 data$hour <- hour(data$datetime)
