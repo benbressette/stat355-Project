@@ -5,6 +5,7 @@ library(lubridate)
 library(tidyr)
 
 #Read in data created from Generator.R
+#IMPORTANT: Change this to the location you saved the csv
 data <- read.csv("~/Stat355/stat355-Project/Data/disney_data_2018.csv")
 
 #Remove NA values

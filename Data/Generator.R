@@ -4,11 +4,25 @@ library(stringr)
 library(data.table)
 library(lubridate)
 library(tidyr)
-options(error=recover)
+
+#IMPORTANT NOTE:
+#I have found that this Generator.R only runs properly on a linux machine (University Scholar Cluster)
+#and not on windows. I believe this is because of how each operating system treats files with
+#.xlsx extension. Because of this we have included in our github a copy of the csv that this
+#R file generates.
+#
+#We have also found that tripplanner frequently updates their database so if the csv is generated again
+#You may get slightly different results than we did.
+
+
+#Download xlsx file that contains two rows with links to metadata, and 14 rows with links
+#To data about each ride
 download.file("https://cdn.touringplans.com/datasets/touringplans_data_dictionary.xlsx", "./dis.xlsx")
 
+#IMPORTANT: Change this to your local directory
 data <- read_excel("./dis.xlsx")
 colnames(data) <- c("links", "content")
+#Reads in the data from each link contained in the excel table
 data$data <- sapply(data$links, function(x)fread(str_trim(x), na.strings="-999"))
 
 #Manually sets all rows to 'ride', then the first 2 to NA
@@ -33,18 +47,9 @@ details <- merge(x=details, y=meta$data[[1]], by.x="date", by.y="DATE", all.x=TR
 #Format Date
 details$date <- mdy(details$date)
 
+#Subset the data to only 2018, selects only relevenat columns and outputs to file
 slice <- details[details$YEAR == 2018]
 slice <- select(slice, date, rides, datetime, SPOSTMIN, SACTMIN, WEATHER_WDWPRECIP, WDWMAXTEMP, WDWMINTEMP, WDWMEANTEMP)
-unique(slice$datetime)
+#IMPORTANT: Change the output path to save data to a different directory
 fwrite(slice, "./disney_data_2018.csv")
 
-daily <- rbindlist(rides$data, use.names = T, idcol="rides")
-daily <- pivot_wider(daily, id_cols=c("date"), 
-                     names_from=rides, values_from=SPOSTMIN, values_fn=list(SPOSTMIN = mean))
-daily <- transform(daily, average = rowMeans(daily[,-1], na.rm=TRUE))
-
-#Merges the rows from rides with the metadata based on the date
-daily <- merge(x=daily, y=meta$data[[1]], by.x="date", by.y="DATE", all.x=TRUE, all.y=FALSE, allow.cartesian=TRUE)
-#Format Date
-daily$date <- mdy(daily$date)
-fwrite(slice, "./disney_data_daily.csv")
